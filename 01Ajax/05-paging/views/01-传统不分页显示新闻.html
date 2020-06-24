@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传统不分页显示新闻</title>
+</head>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+.news{
+    width: 1200px;
+}
+.news>h1{
+text-align: center;
+padding: 10px 0;
+border-bottom: 1px solid #999;
+}
+a{
+text-decoration: none;
+}
+ul{
+    padding: 20px 20px;
+}
+ul li{
+    list-style: none;
+    padding: 10px 0;
+}
+p{
+    color: #999;
+}
+.time{
+    font-size: 12px;
+}
+</style>
+<body>
+    <div class="news">
+        <h1>传统不分页显示新闻</h1>
+        <ul>
+            <% for(let i=0;i<data.length;i++) { %>
+            <li>
+                <h2><a href=""><%= data[i].title %></a></h2>
+                <p class="time"><%= data[i].time %></p>
+                <p class="summary"><%= data[i].summary %></p>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+</body>
+</html>

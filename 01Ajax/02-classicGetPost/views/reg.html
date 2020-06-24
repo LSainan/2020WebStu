@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+</head>
+<style>
+    body{
+        /* width: 100%;
+        height: 100%; */
+ background: url('/images/login-background.jpg');
+    }
+    .regBk{
+        margin:100px auto;
+        width: 300px;
+        height: 300px;
+        background-color: #fff;
+        opacity: .7;
+    }
+    .reg {
+
+        line-height: 2;
+        /* border: 1px solid red; */
+        text-align: center;
+        vertical-align: middle;
+
+    }
+</style>
+
+<body>
+    <div class="regBk">
+        <div class="reg">
+            <h2>用户注册</h2>
+            <form action="" method="">
+                <div class="inputLi">
+                    <input type="text" id="user" name="username" autofocus="autofocus" title="账户" placeholder="请输入账户" required>
+                    <span id="msg"></span>
+                </div>
+                <div class="inputLi">
+                    <input type="password" class="pwd" name="password" title="密码" placeholder="请输入密码" required>
+                </div>
+                <div class="inputLi">
+                    <input type="text" class="code" name="repassword" title="确认密码" placeholder="请再次确认密码" required>
+                    <!-- <img src="./imgs/vcode.png"  class="codeImg" title="点击可换新验证码"> -->
+                </div>
+
+                <div class="button-group">
+                    <button>注册</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script>
+    // 回去input框
+let input=document.querySelector('#user')
+let span=document.querySelector('#msg')
+// 注册blur事件
+input.onblur=function(){
+
+    // this事件源
+    // let username=this.value;
+    let username=encodeURIComponent(this.value)
+    // 第一步：创建xhr对象
+    let xhr=new XMLHttpRequest();
+    // 第二步：建立和服务端的连接 此时还没有发出请求
+    // xhr.open('get','/check?username='+username)
+    xhr.open('post','/check')
+
+    // 第三步：监听返回结果的变化状态
+    // post
+    xhr.setRequestHeader('content-type','application/x-www-form-urlencoded')
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==4&& xhr.status==200){
+            span.innerHTML=xhr.responseText;//服务器返回的数据
+        }
+    }
+    // 第四步：发起请求
+    // xhr.send(null)//null表示没有请求体
+    xhr.send('username='+username)
+
+}
+</script>
+</body>
+
+</html>

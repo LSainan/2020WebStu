@@ -1,0 +1,18 @@
+<script src="jquery1.11.3.js"></script>
+<script>
+    $.ajax({
+        url: '/stu',
+        type: 'get',
+        data: { class: 1 },
+        success: function (res) {
+            $.ajax({
+                url: '/score',
+                type: 'get',
+                success: function (res) {
+                    console.log(res)
+                }
+
+            })
+        }
+    })
+</script>

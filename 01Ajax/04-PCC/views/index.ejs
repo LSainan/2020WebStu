@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>省市区三级联动</title>
+</head>
+<style>
+    .wrap{
+        width: 600px;
+        height: 180px;
+        border: 1px solid skyblue;
+        margin: 100px auto;
+        text-align: center;
+    }
+    .wrap select {
+            width: 130px;
+            height: 30px;
+        }
+</style>
+<body>
+    <div class="wrap">
+        <h2>省市区三级联动</h2>
+        <label for="">按省份选择：</label>
+       <select name="" id="province">
+           <option value="">--省份--</option>
+       </select>
+       <select name="" id="city">
+        <option value="">--市--</option>
+    </select>
+    <select name="" id="country">
+        <option value="">--县区--</option>
+    </select>
+    </div>
+</body>
+<script>
+    let province=document.getElementById('#province')
+    let city=document.getElementById('#city')
+    let country=document.getElementById('#country')
+    let xhr=new XMLHttpRequest();
+    xhr.open('get','/province');
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==4 && xhr.status==200){
+            let res=xhr.responseText;//res就是省份信息
+        }
+    }
+    xhr.send(null)
+</script>
+</html>
