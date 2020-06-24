@@ -1,0 +1,12 @@
+{
+  "name": "01demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01连接和关闭数据库.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务端渲染</title>
+</head>
+<style>
+
+#wrap{
+    width: 500px;
+    height: 300px;
+    border: 1px solid pink;
+    margin: 30px auto;
+}
+table th{
+    background-color: #ff12ff;
+}
+table th,table td{
+    border: 1px solid pink;
+    text-align: center;
+}
+h1,h3{
+    text-align: center;
+}
+</style>
+<body>
+<h1>学生列表(ajax去请求数据，浏览自己渲染数据)</h1>
+<h3><a href="/add">[增加学生]</a></h3>
+<table id="wrap">
+    <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>性别</th>
+        <th>籍贯</th>
+    </tr>
+    <tr>
+        <% for(var i=0;i<arr.length;i++) { %>
+        <td><%= arr[i].name %></td>
+        <td><%= arr[i].age %></td>
+        <td><%= arr[i].sex %></td>
+        <td><%= arr[i].provice %></td>
+        <td><a href="">删除</a></td>
+    </tr>
+    <% } %>
+    <!-- <tr>
+        <td>李四</td>
+        <td>男</td>
+        <td>19</td>
+        <td>福建</td>
+    </tr>
+    <tr>
+        <td>王二</td>
+        <td>男</td>
+        <td>19</td>
+        <td>上海</td>
+    </tr>
+    <tr>
+        <td>麻子</td>
+        <td>男</td>
+        <td>19</td>
+        <td>广州</td>
+    </tr> -->
+</table>
+</body>
+</html>

@@ -1,0 +1,6 @@
+applicationCache.get('./student',(req,res)=>{})
+applicationCache.get('./student/new',(req,res)=>{})
+applicationCache.get('./student/new',(req,res)=>{})
+applicationCache.get('./student/new',(req,res)=>{})
+applicationCache.get('./student/new',(req,res)=>{})
+applicationCache.get('./student/new',(req,res)=>{})

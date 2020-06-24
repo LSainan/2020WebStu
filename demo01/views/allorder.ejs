@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有订单信息</title>
+</head>
+<style>
+ .wrap{
+            margin: 50px auto;
+            width: 500px;
+            height: 400px;
+            border: 2px solid #999;
+            text-align: center;
+        }
+        h1{
+            color: #ff12cd;
+        }
+        ul{
+            list-style: none;
+        }
+
+</style>
+<body>
+   <div class="wrap">
+       <a href="/">订餐入口</a>
+       <h1>所有的订单信息</h1>
+       <ul>
+           <% for(let i=0; i<allOrder.length; i++){ %>
+            <li><a href="/order/<%= allOrder[i] %>"><%= allOrder[i] %></a></li>
+        <% } %>
+       </ul>
+   </div>
+</body>
+</html>

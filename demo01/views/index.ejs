@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单系统</title>
+    <style>
+        .wrap{
+            margin: 50px auto;
+            width: 500px;
+            height: 400px;
+            border: 2px solid #999;
+            text-align: center;
+        }
+        h2{
+            color: #ff12cd;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h2>订单系统</h2>
+       <p>手机号：<input type="text" name="shoujihao" placeholder="请输入手机号"></p>
+       <p>吃什么: <input type="text" name='cai' placeholder="点餐"></p>
+       <p><input type="submit" value="确认" id="btn"></p>
+       <a href="/allorder">查看所有订单信息</a>
+    </div>
+    <!-- 引入jq路径需要改变 -->
+    <script src="/jquery-1.11.3.js"></script>
+<script>
+    $("#btn").click(function(){
+// 得到输入框中的数据
+let shoujihao=$('input[name=shoujihao]').val()
+let cai=$('input[name=cai]').val()
+// Ajax
+//谁能发出请求
+// 浏览器地址栏 src href postman ajax
+// 此时ajax去请求服务器是没有跨域问题的，前后端处于同一域
+//
+$.post('/save',{
+    shoujihao:shoujihao,
+    cai:cai
+},function(data){//data就是服务器返回的数据
+    // data可以告诉你请求是否成功
+    if(data==1){//前后端协商好的标识符
+        alert('success')
+    }else(
+        alert('fail')
+    )
+})
+
+    })
+</script>
+</body>
+</html>
