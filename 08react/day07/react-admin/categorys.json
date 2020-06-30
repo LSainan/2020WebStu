@@ -1,0 +1,36 @@
+{
+    "_id" : ObjectId("5ef6d5159d860b073c7650a5"),
+    "parentId" : "0",
+    "name" : "家电",
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("5ef6d51d9d860b073c7650a6"),
+    "parentId" : "5ef6d5159d860b073c7650a5",
+    "name" : "水箱",
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("5ef6d5279d860b073c7650a7"),
+    "parentId" : "5ef6d5159d860b073c7650a5",
+    "name" : "洗衣机",
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("5ef6d5389d860b073c7650a8"),
+    "parentId" : "0",
+    "name" : "数码",
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("5ef6d5409d860b073c7650a9"),
+    "parentId" : "5ef6d5389d860b073c7650a8",
+    "name" : "手机",
+    "__v" : NumberInt(0)
+}
+{
+    "_id" : ObjectId("5ef6d5499d860b073c7650aa"),
+    "parentId" : "5ef6d5389d860b073c7650a8",
+    "name" : "电脑",
+    "__v" : NumberInt(0)
+}
