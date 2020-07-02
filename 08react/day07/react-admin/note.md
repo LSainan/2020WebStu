@@ -140,6 +140,85 @@ componentDidMOunt(){}钩子函数 计时器，ajax请求
     /product/detail  商品详情
 1、先准备组建
 2、搭建路由，
+//复习 受控表单和非受控表单
+表单的非受控：会维持自身的状态，并根据用户的输入进行更新
+文本框中的
 
+在vue中，给表单双向绑定一个数据，data中的数据变了，输入框中的内容也变了
+此时表单就受vue中的状态的控制
+表单的值有react中的状态进行控制，使用状态进行控制的好处是确保react的单向数据流特性。
+通常会把一个非受控制的表单（组件）转化为受控制的
+拿状态this.state.xxx
+修改状态 this.setState
+e.target.value
+怎么转化？ 只有状态改变了，输入框才改变
+步骤：
+1）先定义一个状态
+2）表单中的数据由状态来决定
+3）给表单绑定一个change事件 当用户输入了数据 会触发change事件
+4）在change事件中修改状态 状态改变了 输入框的值也就改变了
+//react 中的ajax
+ajax发展史
+1）
+2）
+3）
+4）fetch 不是ajax但是也可以发送请求 和ajax是并行
+react本身是构建用户界面的，不包含ajax请求。但是前端应用都需要ajax请求后台接口
+//一个小案例 github github提供了一个接口 接口可以查询最受欢迎的库
 
+//在vue中 ，是在created或者mounted钩子函数中发送请求
 
+//在react中，也是有对应的钩子函数，叫componentDidMounted(){}钩子函数不要写成箭头函数的形式
+它里面的钩子是正常的也是组件对象
+
+//2020.7.1
+商品上架和下架
+1)接口函数 reqUpdateStatus
+点击按钮选择下架还是上架 更新商品状态
+onClick={()=>{this.UpdateStatus(product._id,product.status)}}
+UpdateStatus=async (id,status)=>{
+    let result=await reqUpdateStatus(id,status)
+    if(result.data.status===0){
+        message.success('更新成功')
+        //重新获取商品的列表
+        this.getProducts(this.pageNum)
+    }
+}
+//商品的添加
+add-update.jsx
+import {Card,Input } from 'antd'
+//获取一级或二级分类列表 请求接口拿到数据
+getCategorys=async (parentId)=>{
+    //parentId===0是一级分类数据
+    const result=await reqCategorys(parentId);
+    if(result.data.status===0){
+        const categorys=result.data.data
+        console.log(categorys)
+        this.initOption(categorys);
+        //什么时候获取分类数据 componentDidMount(){this.getCategorys() }
+    }
+
+}
+//拿到接口 import {reqCategorys} from '../../api/index
+//initOption label 给用户看的 value提交给服务器
+initOption=(categorys)=>{
+    const options= categorys.map(c=>({
+        value:c._id,
+        label:c.name,
+        isLeaf:false
+    }))
+    //console.log(options)
+    //更新options状态
+    this.setState({
+        options
+    })
+}
+//一级获取完成
+//获取二级 loadData
+//获取一级分类的_id
+targetOption.value
+//push的时候可以传参数
+//product有值 修改商品
+!!product 转成布尔值
+//级联选择（重）
+//浏览器中只能发送get请求

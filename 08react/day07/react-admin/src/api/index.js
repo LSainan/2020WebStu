@@ -46,4 +46,8 @@ export const reqProducts = (pageNum, pageSize) => ajax(BASE_URL + '/manage/produ
 
 // 11).根据ID/Name 搜索产品分页列表
 export const reqSearchProducts=(pageNum,pageSize,searchName,searchType)=>ajax(BASE_URL + '/manage/product/search',{pageNum,pageSize,[searchType]:searchName})
+// 对商品进行上架/下架处理
 
+export const reqUpdateStatus = (productId, status) => ajax(BASE_URL + '/manage/product/updateStatus', { productId, status }, 'POST')//GET可以省略
+// 9 根据分类ID获取分类
+export const reqCategory=(categoryId)=>ajax(BASE_URL + '/manage/category/info', { categoryId }, 'GET')

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Table, Card, Icon, Select, Input } from 'antd'
-import { reqProducts,reqSearchProducts } from '../../api/index'
+import { Button, Table, Card, Icon, Select, Input,message } from 'antd'
+import { reqProducts,reqSearchProducts,reqUpdateStatus} from '../../api/index'
 import LinkButton from '../../components/link-button'
 import { PAGE_SIZE } from '../../utils/constants'
 import { withRouter } from 'react-router-dom'
@@ -33,12 +33,11 @@ const { Option } = Select;
             {
                 title: '状态',
                 width: 100,
-                dataIndex: 'status',
-                render: (status) => {
+                render: (product) => {
                     return (
                         <span>
-                            <Button type='primary'>下架</Button>
-                            <span>在售</span>
+                            <Button type='primary' onClick={()=>{this.updateStatus(product._id,product.status===1?2:1)}}>{product.status===1?'下架':'上架'}</Button>
+                    <span>{product.status===1?'在售':'已下架'}</span>
                         </span>
                     )
                 }
@@ -48,14 +47,24 @@ const { Option } = Select;
                 width: 100,
                 render: (product) => (
                     <span>
-                        <LinkButton style={{ marginRight: '10px' }} onClick={()=>{this.productDetail()}}>详情</LinkButton>
-                        <LinkButton >修改</LinkButton>
+                        {/* <LinkButton style={{ marginRight: '10px' }} onClick={()=>{this.productDetail()}}>详情</LinkButton> */}
+                        <LinkButton style={{ marginRight: '10px' }} onClick={()=>{this.props.history.push('/product/detail',{product})}}>详情</LinkButton>
+                        <LinkButton onClick={()=>{this.props.history.push('/product/addUpdate',{product})}}>修改</LinkButton>
                     </span>
                 )
             }
         ];
     }
-    // 点击商品详情页面
+    // 更新商品的状态
+    updateStatus= async(id,status)=>{
+       let result= await reqUpdateStatus(id,status)
+       if(result.data.status===0){
+        message.success('更新商品状态成功')
+        //重新获取商品的列表
+        this.getProducts(this.pageNum)
+        // this.getProducts(1)
+    }
+    }
 
     // 获取商品列表数据
     getProducts = async (pageNum) => {
@@ -84,13 +93,13 @@ const { Option } = Select;
         this.getProducts(1)
     }
     // 商品详情
-    productDetail=()=>{
-        return this.props.history.push('/product/detail')
-    }
+    // productDetail=()=>{
+    //     return this.props.history.push('/product/detail')
+    // }
     //添加更新商品
-    addUpdateProduct=()=>{
-        return this.props.history.push('/product/addUpdate')
-    }
+    // addUpdateProduct=()=>{
+    //     return this.props.history.push('/product/addUpdate')
+    // }
     // 即将挂载
     componentWillMount() {
         this.initColumns();
@@ -113,7 +122,7 @@ const { Option } = Select;
                  style={{ width: 100, margin: '0 10px' }}
                  placeholder="关键字"
                  value={searchName}
-                 onChange={event=>this.setState({searchName:event.target.value})}
+                 onChange={e=>this.setState({searchName:e.target.value})}
                  />
                 <Button type="primary"
                 onClick={()=>{this.getProducts(1)}}
@@ -121,7 +130,8 @@ const { Option } = Select;
             </span>
         )
         const extra = (
-            <Button type='primary' onClick={()=>{this.addUpdateProduct()}}>
+            // <Button type='primary' onClick={()=>{this.addUpdateProduct()}}>
+            <Button type='primary' onClick={()=>{this.props.history.push('/product/addUpdate')}}>
                 <Icon type="plus" /> 添加商品
             </Button>
         )

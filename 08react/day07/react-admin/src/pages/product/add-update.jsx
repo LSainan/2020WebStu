@@ -1,108 +1,202 @@
 import React, { Component } from 'react'
-import { Form, Select, Input, Card, Icon, Upload, message } from 'antd'
+import { Form, Input, Card, Icon, Cascader, Button } from 'antd'
 
-const { Option } = Select;
+import PicturesWall from './pictures-wall'
+import { reqCategorys } from '../../api/index';
+import LinkButton from '../../components/link-button'
 const { TextArea } = Input;
-
-
-// 图片上传
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
+const { Item } = Form
+//label 中的数据给用户看的，value提交给服务器
 class productAddUpdate extends Component {
+    // 自动校验 校验输入商品的价格
+    validatorPrice = (rule, value, callback) => {
+        if (value * 1 > 0) {
+            callback()
+        } else {
+            callback('价格必须大于0')
+        }
+    }
+    // loading效果，默认为false
     state = {
         loading: false,
+        options: []
     };
-    handleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                }),
-            );
-        }
+    // 二级联动 onchange选中 点击一级
+    onChange = (value, selectedOptions) => {
+        // console.log(value, selectedOptions);
     };
+    //初始化options
+    initOptinos = async (categorys) => {
+        const options = categorys.map(c => ({//map之后拿到options
+            value: c._id,
+            label: c.name,
+            isLeaf: false
+        }))
+        // 如果是一个二级分类商品
+        let { isUpdate, product } = this;
+        let { pCategoryId, categoryId } = product;
+        if (isUpdate && pCategoryId !=='0') {
+          const subCategorys=  await this.getCategorys(pCategoryId);
+          let childOptions = subCategorys.map(c => ({
+            value: c._id,
+            label: c.name,
+            isLeaf: true
+        }))
+        const targetOption=options.find(option=>option.value===pCategoryId)
+        targetOption.children = childOptions;
+        }
+
+        // console.log(options)
+        //转变完之后更新状态
+        this.setState({
+            options,
+        })
+    }
+    // 点击一级走到loadData
+    loadData = async selectedOptions => {
+        const targetOption = selectedOptions[0];
+        targetOption.loading = true;//开启loading效果
+        // console.log(targetOption.value)//一级分类的_id 根据一级分类_id获取二级分类，方法getCategorys
+        const subCategorys = await this.getCategorys(targetOption.value)//二级分类
+        //   console.log(subCategorys)//返回一个promise
+        targetOption.loading = false;//关闭loading效果
+        //拿到二级分类数据，有的有有的没有 所以进行判断
+        if (subCategorys && subCategorys.length > 0) {
+            //当前的一级分类有二级数据,让二级分类列表进行转换成 value label isLeaf的形式
+            let childOptions = subCategorys.map(c => ({
+                value: c._id,
+                label: c.name,
+                isLeaf: true
+            }))
+            // console.log(childOptions)
+            // 得到数据之后 给targetOption加上Children
+            targetOption.children = childOptions
+        } else {
+            //当前的一级分类没有二级数据
+            targetOption.isLeaf = true
+
+        }
+        this.setState({
+            options: [...this.state.options],
+        });
+    };
+    // 获取一级或二级分类列表
+    getCategorys = async (parentId) => {
+        let result = await reqCategorys(parentId)
+        //    console.log(result.data)
+        //拿到结果之后
+        if (result.data.status === 0) {//表示获取分类数据成功
+            const categorys = result.data.data//数据可能是一级分类也可能是二级分类，需要判断
+            if (parentId === '0') {
+                this.initOptinos(categorys)
+            } else {//二级分类 promise成功的结果
+                return categorys;
+            }
+            // console.log(categorys)//添加商品就调用商品
+            //获取数据之后要初始化options,写一个方法进行初始化
+            this.initOptinos(categorys);
+        }
+    }
+    // 增加或修改提交
+    submit = () => {
+        this.props.form.validateFields((error, values) => {
+            if (!error) {
+                // 验证通过
+                console.log(values)
+            }
+        })
+    }
+    //
+    componentWillMount() {
+        let product
+        if (this.props.location.state) {
+            product = this.props.location.state.product
+        }
+        //   console.log(product)
+        //如何知道是添加还是修改 如果传递了product isUpdate是true
+        this.isUpdate = !!product;
+        this.product = product || {};
+    }
+    componentDidMount() {
+        this.getCategorys('0')
+    }
     render() {
+        let { isUpdate, product } = this;
+        let { pCategoryId,categoryId } = product;
+        // console.log(product)
+        let categoryIds = [];
+        if (isUpdate) {
+            //修改
+            if (pCategoryId === "0") {
+                //一级
+                categoryIds.push(categoryId)
+
+            } else {
+                //此商品是二级分类下的商品
+                categoryIds.push(pCategoryId)
+                categoryIds.push(categoryId)
+
+            }
+        }
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 4 },
-            wrapperCol: { span: 15 },
+            wrapperCol: { span: 12 },
         };
 
-
-        const uploadButton = (
-            <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
-            </div>
-        );
-        const { imageUrl } = this.state;
-        let title = (<span> <Icon type="arrow-left" style={{ color: '#1DA57A', marginRight: '10px' }} />添加商品 </span>)
+        const title = (<span>  <LinkButton><Icon onClick={() => { this.props.history.goBack() }} type="arrow-left" style={{ color: '#1DA57A', marginRight: '10px' }} /></LinkButton><span>{isUpdate ? '修改商品' : '添加商品'}</span></span>)
         return (
             <Card title={title}>
-                <Form style={{ marginTop: '10px' }}>
-                    <Form.Item {...formItemLayout} label="商品名称">
-                        {getFieldDecorator('productName', {
+                <Form {...formItemLayout}>
+                    <Item label="商品名称">
+                        {getFieldDecorator('name', {
+                            initialValue: product.name,
                             rules: [{ required: true, message: '请输入商品名称！' }]
                         })(<Input placeholder='请输入商品名称' />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="商品描述">
+                    </Item>
+                    <Item label="商品描述">
                         {getFieldDecorator('desc', {
+                            initialValue: product.desc,
                             rules: [{ required: true, message: '请描述商品！' }]
-                        })(<TextArea placeholder="请输入商品描述" rows={4} />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="商品价格">
+                        })(<TextArea placeholder="请输入商品描述" autosize={{ minRows: 3, maxRows: 6 }} />)}
+                    </Item>
+                    <Item label="商品价格">
                         {getFieldDecorator('price', {
-                            rules: [{ required: true }],
+                            initialValue: product.price,
+                            rules: [{ required: true, message: '请输入商品价格！' },
+                            { validator: this.validatorPrice }
+                            ],
                         })(
-                            <Input placeholder='请输入商品价格' suffix='元' />
+                            <Input type='number' placeholder='请输入商品价格' addonAfter={<span>元</span>} />
                         )}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="商品分类">
-                        {getFieldDecorator('categorys', {
+                    </Item>
+                    <Item label="商品分类">
+                        {getFieldDecorator('categoryIds', {
+                            initialValue: categoryIds,
                             rules: [{ required: true, message: '请指定商品分类' }],
                         })(
-                            <Select
-                                placeholder="请指定商品分类"
-                            >
-                                <Option value="0">手机</Option>
-                                <Option value="1">冰箱</Option>
-                            </Select>,
+                            <Cascader
+                                options={this.state.options}
+                                loadData={this.loadData}
+                                onChange={this.onChange}
+                                changeOnSelect
+                            />
                         )}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="商品图片">
-                    <Upload
-                        name="avatar"
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        beforeUpload={beforeUpload}
-                        onChange={this.handleChange}
-                    >
-                        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                    </Upload>
-                    </Form.Item>
+                    </Item>
+                    <Item label='商品图片'>
+                       <PicturesWall></PicturesWall>
+                    </Item>
+                    <Item label="商品详情">
+                        {getFieldDecorator('detail', {
+                            rules: [{ required: true, message: '请输入商品详情！' },
+                            ],
+                        })(
+                            <Input placeholder='请输入商品详情' />
+                        )}
+                    </Item>
+                    <Item>
+                        <Button type='primary' onClick={this.submit}>提交</Button>
+                    </Item>
                 </Form>
             </Card>
 
