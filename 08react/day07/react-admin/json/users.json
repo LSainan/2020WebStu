@@ -1,0 +1,27 @@
+{ 
+    "_id" : ObjectId("5ef13d6f54cf603e3cd45d0e"), 
+    "username" : "admin", 
+    "password" : "21232f297a57a5a743894a0e4a801fc3", 
+    "create_time" : 1592868207972.0, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5efd79f5b9bcc02ea4041553"), 
+    "username" : "wangcai", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "phone" : "12345678901", 
+    "email" : "12345678901@qq.com", 
+    "role_id" : "5efd796db9bcc02ea4041551", 
+    "create_time" : 1593670133300.0, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5efd7a11b9bcc02ea4041554"), 
+    "username" : "xiaoqiang", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "phone" : "12345678901", 
+    "email" : "12345678901@qq.com", 
+    "role_id" : "5efd79a5b9bcc02ea4041552", 
+    "create_time" : 1593670161458.0, 
+    "__v" : NumberInt(0)
+}

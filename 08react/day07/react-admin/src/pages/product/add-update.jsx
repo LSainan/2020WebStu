@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
-import { Form, Input, Card, Icon, Cascader, Button } from 'antd'
+import { Form, Input, Card, Icon, Cascader, Button, message } from 'antd'
+import { reqCategorys,reqAddOrUpdateProduct } from '../../api/index';
 
+import RichTextEditor from './rich-text-editor'
 import PicturesWall from './pictures-wall'
-import { reqCategorys } from '../../api/index';
 import LinkButton from '../../components/link-button'
+
+
 const { TextArea } = Input;
 const { Item } = Form
 //label 中的数据给用户看的，value提交给服务器
 class productAddUpdate extends Component {
+
     // 自动校验 校验输入商品的价格
     validatorPrice = (rule, value, callback) => {
         if (value * 1 > 0) {
@@ -21,6 +25,13 @@ class productAddUpdate extends Component {
         loading: false,
         options: []
     };
+    constructor(props){
+        super(props)
+        // ref 创建 pw --picturesWall
+       this.pw= React.createRef()
+         // 创建ref，拿到实例
+        this.editor= React.createRef()
+    }
     // 二级联动 onchange选中 点击一级
     onChange = (value, selectedOptions) => {
         // console.log(value, selectedOptions);
@@ -82,7 +93,7 @@ class productAddUpdate extends Component {
     };
     // 获取一级或二级分类列表
     getCategorys = async (parentId) => {
-        let result = await reqCategorys(parentId)
+       const result = await reqCategorys(parentId)
         //    console.log(result.data)
         //拿到结果之后
         if (result.data.status === 0) {//表示获取分类数据成功
@@ -97,16 +108,49 @@ class productAddUpdate extends Component {
             this.initOptinos(categorys);
         }
     }
-    // 增加或修改提交
-    submit = () => {
-        this.props.form.validateFields((error, values) => {
-            if (!error) {
-                // 验证通过
-                console.log(values)
+
+    //增加或修改提交
+    submit=()=>{
+        this.props.form.validateFields( async (error,values)=>{
+            if(!error){
+                //验证通过
+                // console.log(values)
+                // let imgs=this.pw.current.getImgs()
+                // let detail= this.editor.current.getDetail()
+                // console.log(imgs)
+                // console.log(detail)
+                // 准备数据
+                const {name,desc,price,categoryIds}=values;
+                // console.log(name,desc,price,categoryIds)
+                let pCategoryId,categoryId;
+                if(categoryIds.length===1){
+                    // 一级分类
+                    pCategoryId="0"
+                    categoryId=categoryIds[0];
+                }else{
+                    // 二级分类
+                    pCategoryId=categoryIds[0];
+                    categoryId=categoryIds[1];
+                }
+               let imgs=this.pw.current.getImgs()
+               let detail= this.editor.current.getDetail()
+            //    console.log(imgs)
+               const product={name,desc,price,imgs,detail,pCategoryId,categoryId}
+               if(this.isUpdate){
+                   product._id=this.product._id
+               }
+            //    调接口
+               const result= await reqAddOrUpdateProduct(product)
+            //  提示
+            if(result.data.status===0){
+                message.success(`${this.isUpdate?'更新':'添加'}商品成功`)
+                this.props.history.goBack()
+            }else{
+                message.error(`${this.isUpdate?'更新':'添加'}商品失败`)
+            }
             }
         })
     }
-    //
     componentWillMount() {
         let product
         if (this.props.location.state) {
@@ -120,9 +164,10 @@ class productAddUpdate extends Component {
     componentDidMount() {
         this.getCategorys('0')
     }
+
     render() {
         let { isUpdate, product } = this;
-        let { pCategoryId,categoryId } = product;
+        let { pCategoryId,categoryId ,imgs,detail} = product;
         // console.log(product)
         let categoryIds = [];
         if (isUpdate) {
@@ -184,15 +229,12 @@ class productAddUpdate extends Component {
                         )}
                     </Item>
                     <Item label='商品图片'>
-                       <PicturesWall></PicturesWall>
+                       <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                     </Item>
-                    <Item label="商品详情">
-                        {getFieldDecorator('detail', {
-                            rules: [{ required: true, message: '请输入商品详情！' },
-                            ],
-                        })(
-                            <Input placeholder='请输入商品详情' />
-                        )}
+                    <Item label="商品详情" labelCol={{span:4}} wrapperCol={{span:20}} >
+
+                           <RichTextEditor ref={this.editor} detail={detail}></RichTextEditor>
+
                     </Item>
                     <Item>
                         <Button type='primary' onClick={this.submit}>提交</Button>
@@ -203,4 +245,4 @@ class productAddUpdate extends Component {
         )
     }
 }
-export default Form.create()(productAddUpdate)
+export default Form.create()(productAddUpdate);

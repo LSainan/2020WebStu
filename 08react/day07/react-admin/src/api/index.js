@@ -11,19 +11,52 @@ let BASE_URL = '';
 // }
 // 1)登录 简写并导出 调用一个ajax得到一个promise
 export const reqLogin = (username, password) => ajax(BASE_URL + '/login', { username, password }, 'POST')
+// 2）添加用户
 
-// 2) 获取一级或某个二级分类列表
+// 3）更新用户
+
+// 4）获取所有用户列表
+
+// 5）删除用户
+
+// 6) 获取一级或某个二级分类列表
 export const reqCategorys = (parentId) => ajax(BASE_URL + '/manage/category/list', { parentId })
 
-// 3)添加分类
+//7)添加分类
 export const reqAddCategory = (parentId, categoryName) => ajax(BASE_URL + '/manage/category/add', { parentId, categoryName }, 'POST')
 
 
-// 4)更新品类名称
+// 8)更新品类名称
 export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE_URL + '/manage/category/update', { categoryId, categoryName }, 'POST')
 
+// 9 根据分类ID获取分类
+export const reqCategory = (categoryId) => ajax(BASE_URL + '/manage/category/info', { categoryId }, 'GET')
 
-// 天气
+// 10). 获取商品分页列表
+export const reqProducts = (pageNum, pageSize) => ajax(BASE_URL + '/manage/product/list', { pageNum, pageSize }, 'GET')//GET可以省略
+
+// 11).根据ID/Name 搜索产品分页列表
+export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) => ajax(BASE_URL + '/manage/product/search', { pageNum, pageSize, [searchType]: searchName })
+
+// 12） 添加商品
+export const reqUpdateStatus = (productId, status) => ajax(BASE_URL + '/manage/product/updateStatus', { productId, status }, 'POST')//GET可以省略
+// 13）更新商品
+export const reqAddOrUpdateProduct = (product) => ajax(BASE_URL +' /manage/product/'+(product._id? 'update' : 'add'), product, 'POST')
+
+// 14）对商品进行上架/下架处理
+
+// 15）上传图片
+// upLoad组件已经上传....
+
+// 16)删除图片
+export const reqDeleteImg = (name) => ajax(BASE_URL + '/manage/img/delete', { name }, 'POST')
+// 17）添加角色
+
+// 18）获取角色列表
+
+// 19）更新角色（给角色设置权限）
+
+// 20） 天气，获取天气信息
 export const reqWeather = (city) => {
     return new Promise((resolve, reject) => {
         let url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
@@ -41,13 +74,3 @@ export const reqWeather = (city) => {
         })
     })
 }
-// 10). 获取商品分页列表
-export const reqProducts = (pageNum, pageSize) => ajax(BASE_URL + '/manage/product/list', { pageNum, pageSize }, 'GET')//GET可以省略
-
-// 11).根据ID/Name 搜索产品分页列表
-export const reqSearchProducts=(pageNum,pageSize,searchName,searchType)=>ajax(BASE_URL + '/manage/product/search',{pageNum,pageSize,[searchType]:searchName})
-// 对商品进行上架/下架处理
-
-export const reqUpdateStatus = (productId, status) => ajax(BASE_URL + '/manage/product/updateStatus', { productId, status }, 'POST')//GET可以省略
-// 9 根据分类ID获取分类
-export const reqCategory=(categoryId)=>ajax(BASE_URL + '/manage/category/info', { categoryId }, 'GET')

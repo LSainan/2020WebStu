@@ -36,13 +36,13 @@ export default class Admin extends Component {
           return  <Redirect to='/login'></Redirect>
         }
         return (
-            <Layout className='admin' style={{ height:'100%',width:'100%', margin: 0 }}>
+            <Layout style={{ minHeight:'100%',width:'100%', margin: 0 }}>
                 <Sider>
                     <LeftNav></LeftNav>
                 </Sider>
-                <Layout style={{ height:'100%',margin: '0', borderRadius: '0' }}>
-                    <Header></Header>
-                    <Content style={{ backgroundColor: '#fff', margin: '20px',height:'800px!import' }}>
+                <Layout style={{height:'100%',margin: '0' }}>
+                    <Header>Header</Header>
+                    <Content style={{ backgroundColor: '#fff', margin: '20px'}}>
 
                         <Switch>
                             <Route path='/home' component={Home}></Route>
@@ -56,9 +56,7 @@ export default class Admin extends Component {
                             <Redirect to='/home'></Redirect>
                         </Switch>
                     </Content>
-
-
-                    <Footer style={{textAlign:'center',color:'#ccc'}}>Footer</Footer>
+                    <Footer style={{textAlign:'center',color:'skyblue'}}>学习react，你看，我是底部，看见我了吗~</Footer>
                 </Layout>
             </Layout>
         )

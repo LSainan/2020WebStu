@@ -1,0 +1,35 @@
+{ 
+    "_id" : ObjectId("5efd796db9bcc02ea4041551"), 
+    "menus" : [
+        "all", 
+        "/home", 
+        "/products", 
+        "/category", 
+        "/product", 
+        "/user", 
+        "/role", 
+        "/charts", 
+        "/charts/bar", 
+        "/charts/line", 
+        "/charts/pie", 
+        "/order"
+    ], 
+    "name" : "CEO", 
+    "create_time" : 1593669997457.0, 
+    "__v" : NumberInt(0), 
+    "auth_name" : "admin", 
+    "auth_time" : 1593670028270.0
+}
+{ 
+    "_id" : ObjectId("5efd79a5b9bcc02ea4041552"), 
+    "menus" : [
+        "/products", 
+        "/category", 
+        "/product"
+    ], 
+    "name" : "销售", 
+    "create_time" : 1593670053547.0, 
+    "__v" : NumberInt(0), 
+    "auth_name" : "admin", 
+    "auth_time" : 1593670080748.0
+}
