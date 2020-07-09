@@ -11,14 +11,14 @@ let BASE_URL = '';
 // }
 // 1)登录 简写并导出 调用一个ajax得到一个promise
 export const reqLogin = (username, password) => ajax(BASE_URL + '/login', { username, password }, 'POST')
-// 2）添加用户
+// 2）添加用户 // 3）更新用户
+export const reqAddOrUpdateUser=(user)=>ajax(BASE_URL+'manage/user/'+(user._id?'update':'add'),user,'post')
 
-// 3）更新用户
 
 // 4）获取所有用户列表
-
+export const reqUser=()=>ajax(BASE_URL+'/manage/user/list','get')
 // 5）删除用户
-
+export const reqDeleteUser=(userId)=>ajax(BASE_URL+'/manage/user/delete',{userId},'post')
 // 6) 获取一级或某个二级分类列表
 export const reqCategorys = (parentId) => ajax(BASE_URL + '/manage/category/list', { parentId })
 
@@ -51,11 +51,11 @@ export const reqAddOrUpdateProduct = (product) => ajax(BASE_URL +' /manage/produ
 // 16)删除图片
 export const reqDeleteImg = (name) => ajax(BASE_URL + '/manage/img/delete', { name }, 'POST')
 // 17）添加角色
-
+export const reqAddRole=(roleName)=>ajax(BASE_URL+'/manage/role/add',{roleName},"POST")
 // 18）获取角色列表
-
+export const reqRoles=()=>ajax(BASE_URL+'/manage/role/list',"GET")
 // 19）更新角色（给角色设置权限）
-
+export const reqUpdateRole=(role)=>ajax(BASE_URL+'/manage/role/update',role,"POST")
 // 20） 天气，获取天气信息
 export const reqWeather = (city) => {
     return new Promise((resolve, reject) => {
