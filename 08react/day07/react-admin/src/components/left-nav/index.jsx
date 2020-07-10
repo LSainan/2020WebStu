@@ -13,6 +13,17 @@ const { SubMenu } = Menu;
 // } from '@ant-design/icons';
 
 class LeftNav extends Component {
+
+    state={
+        collapsed:false,
+    };
+    // 控制左侧导航收缩
+    toggleCollapsed=()=>{
+        this.setState({
+            collapsed: !this.state.collapsed,
+          });
+    }
+    //
     getMenuNodes = (menuList) => {
         return menuList.map(item => {
             if (!item.children) {

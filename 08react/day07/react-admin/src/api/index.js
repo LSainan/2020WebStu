@@ -12,11 +12,14 @@ let BASE_URL = '';
 // 1)登录 简写并导出 调用一个ajax得到一个promise
 export const reqLogin = (username, password) => ajax(BASE_URL + '/login', { username, password }, 'POST')
 // 2）添加用户 // 3）更新用户
-export const reqAddOrUpdateUser=(user)=>ajax(BASE_URL+'manage/user/'+(user._id?'update':'add'),user,'post')
+//添加/修改用户(如果存在._id说明是更新就用update拼接路径，否则就是添加用户)
+export const reqAddOrUpdateUser=(user)=>ajax(BASE_URL+'/manage/user/'+(user._id?'update':'add'),user,'POST')
+
+// export const reqAddOrUpdateUser=(user)=>ajax(BASE_URL+'manage/user/'+(user._id?'update':'add'),user,'post')
 
 
 // 4）获取所有用户列表
-export const reqUser=()=>ajax(BASE_URL+'/manage/user/list','get')
+export const reqUser=()=>ajax(BASE_URL+'/manage/user/list','GET')
 // 5）删除用户
 export const reqDeleteUser=(userId)=>ajax(BASE_URL+'/manage/user/delete',{userId},'post')
 // 6) 获取一级或某个二级分类列表
@@ -61,12 +64,13 @@ export const reqWeather = (city) => {
     return new Promise((resolve, reject) => {
         let url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
         jsonp(url, {}, (err, data) => {
+
             if (data.status === 'success') {
                 // 解构赋值
                 let { dayPictureUrl, weather } = data.results[0].weather_data[0];
                 // console.log(dayPictureUrl,weather)
                 resolve({ dayPictureUrl, weather })
-                // message.success('获取天气成功~')
+                message.success('获取天气成功~')
             } else {
                 message.error('获取天气失败~')
             }
