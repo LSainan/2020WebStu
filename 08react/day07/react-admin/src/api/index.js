@@ -70,7 +70,7 @@ export const reqWeather = (city) => {
                 let { dayPictureUrl, weather } = data.results[0].weather_data[0];
                 // console.log(dayPictureUrl,weather)
                 resolve({ dayPictureUrl, weather })
-                message.success('获取天气成功~')
+                // message.success('获取天气成功~')
             } else {
                 message.error('获取天气失败~')
             }
